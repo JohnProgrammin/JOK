@@ -1,0 +1,827 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Logos | Jok Production</title>
+    <meta name="description" content="A minimalist gallery of premium brand logos">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- GSAP & ScrollTrigger -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    
+    <!-- Phosphor Icons -->
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    
+    <style>
+        :root {
+            --primary-color: #00ff88;
+            --dark-bg: #000000;
+            --card-bg: #111111;
+            --text-primary: #ffffff;
+            --text-secondary: #a0a0a0;
+            --border-color: #333333;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--dark-bg);
+            color: var(--text-primary);
+            overflow-x: hidden;
+            min-height: 100vh;
+        }
+        
+        /* Minimalist navigation */
+        .minimal-nav {
+            background: rgba(0, 0, 0, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        
+        /* Header with search */
+        .header-with-search {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem 2rem 0;
+        }
+        
+        /* ORIGINAL CARD STYLES - KEPT AS YOU LIKED THEM */
+        .logo-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 1px;
+            padding: 2rem;
+            max-width: 1600px;
+            margin: 0 auto;
+        }
+        
+        .logo-box {
+            aspect-ratio: 1 / 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(10, 10, 10, 0.7);
+            border: 1px solid rgba(255, 255, 255, 0.03);
+            transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+            position: relative;
+            overflow: hidden;
+            cursor: pointer;
+            transform-style: preserve-3d;
+            perspective: 1000px;
+        }
+        
+        /* SHINE EFFECT - KEPT AS REQUESTED */
+        .logo-box::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+            transition: left 0.7s;
+        }
+        
+        .logo-box:hover::before {
+            left: 100%;
+        }
+        
+        .logo-box::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(circle at center, transparent 30%, rgba(255, 255, 255, 0.03) 100%);
+            opacity: 0;
+            transition: opacity 0.4s;
+        }
+        
+        .logo-box:hover::after {
+            opacity: 1;
+        }
+        
+        .logo-box:hover {
+            background: rgba(20, 20, 20, 0.9);
+            border-color: rgba(255, 255, 255, 0.1);
+            box-shadow: 
+                0 0 20px rgba(255, 255, 255, 0.05),
+                0 0 40px rgba(255, 255, 255, 0.02),
+                inset 0 0 20px rgba(255, 255, 255, 0.01);
+            transform: translateY(-5px) scale(0.98) rotateX(2deg) rotateY(2deg);
+            z-index: 10;
+        }
+        
+        /* Unique floating animation for each card */
+        .logo-box:nth-child(3n+1) {
+            animation: float-1 8s ease-in-out infinite;
+        }
+        
+        .logo-box:nth-child(3n+2) {
+            animation: float-2 10s ease-in-out infinite;
+        }
+        
+        .logo-box:nth-child(3n+3) {
+            animation: float-3 12s ease-in-out infinite;
+        }
+        
+        @keyframes float-1 {
+            0%, 100% { transform: translateY(0) rotate(0.5deg); }
+            50% { transform: translateY(-8px) rotate(-0.5deg); }
+        }
+        
+        @keyframes float-2 {
+            0%, 100% { transform: translateY(0) rotate(-0.3deg); }
+            50% { transform: translateY(-10px) rotate(0.3deg); }
+        }
+        
+        @keyframes float-3 {
+            0%, 100% { transform: translateY(0) rotate(0.7deg); }
+            50% { transform: translateY(-6px) rotate(-0.7deg); }
+        }
+        
+        .logo-box:hover {
+            animation: none !important;
+        }
+        
+        /* IMAGE FIX - Images will now fit the cards properly */
+        .logo-img {
+            width: 80%;
+            height: 80%;
+            object-fit: contain;
+            filter: grayscale(0.4) brightness(1.1);
+            transition: all 0.5s ease;
+            transform-style: preserve-3d;
+        }
+        
+        .logo-box:hover .logo-img {
+            filter: grayscale(0) brightness(1.4) drop-shadow(0 0 10px rgba(255, 255, 255, 0.3));
+            transform: scale(1.08) rotateZ(-1deg);
+        }
+        
+        .logo-info {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            padding: 1.5rem;
+            background: linear-gradient(transparent, rgba(0, 0, 0, 0.9));
+            transform: translateY(100%);
+            transition: transform 0.4s ease;
+            backdrop-filter: blur(5px);
+        }
+        
+        .logo-box:hover .logo-info {
+            transform: translateY(0);
+        }
+        
+        /* Year filter buttons */
+        .filter-container {
+            display: flex;
+            justify-content: center;
+            gap: 0.5rem;
+            padding: 1rem 2rem 0;
+            max-width: 1400px;
+            margin: 0 auto;
+            flex-wrap: wrap;
+        }
+        
+        .filter-btn {
+            background: transparent;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: var(--text-secondary);
+            padding: 0.75rem 1.5rem;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+        }
+        
+        .filter-btn.active, .filter-btn:hover {
+            background: var(--primary-color);
+            color: #000;
+            border-color: var(--primary-color);
+        }
+        
+        /* Search box - properly placed */
+        .search-box {
+            background: rgba(17, 17, 17, 0.9);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 50px;
+            padding: 0.75rem 1.5rem;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            width: 300px;
+        }
+        
+        .search-box:focus-within {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 2px rgba(0, 255, 136, 0.1);
+        }
+        
+        .search-input {
+            background: transparent;
+            border: none;
+            outline: none;
+            color: white;
+            width: 100%;
+            font-size: 0.9rem;
+        }
+        
+        /* Modal with slideshow */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.95);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+        
+        .modal-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+        
+        .modal-content {
+            background: rgba(20, 20, 20, 0.95);
+            border-radius: 16px;
+            padding: 2rem;
+            max-width: 900px;
+            width: 95%;
+            max-height: 90vh;
+            transform: scale(0.9);
+            transition: transform 0.3s ease;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            overflow-y: auto;
+        }
+        
+        .modal-overlay.active .modal-content {
+            transform: scale(1);
+        }
+        
+        .close-modal {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: rgba(255, 255, 255, 0.1);
+            border: none;
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: background 0.3s ease;
+            z-index: 10;
+        }
+        
+        .close-modal:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+        
+        /* Slideshow styles */
+        .slideshow-container {
+            position: relative;
+            width: 100%;
+            height: 400px;
+            margin-bottom: 2rem;
+            border-radius: 12px;
+            overflow: hidden;
+        }
+        
+        .slideshow-slide {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            transition: opacity 0.5s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(30, 30, 30, 0.7);
+        }
+        
+        .slideshow-slide.active {
+            opacity: 1;
+        }
+        
+        .slideshow-image {
+            max-width: 90%;
+            max-height: 90%;
+            object-fit: contain;
+        }
+        
+        .slideshow-nav {
+            position: absolute;
+            bottom: 1rem;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 0.5rem;
+            z-index: 5;
+        }
+        
+        .slideshow-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.3);
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+        
+        .slideshow-dot.active {
+            background: var(--primary-color);
+        }
+        
+        .slideshow-arrow {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(0, 0, 0, 0.5);
+            border: none;
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: background 0.3s ease;
+            z-index: 5;
+        }
+        
+        .slideshow-arrow.prev {
+            left: 1rem;
+        }
+        
+        .slideshow-arrow.next {
+            right: 1rem;
+        }
+        
+        .slideshow-arrow:hover {
+            background: rgba(0, 0, 0, 0.7);
+        }
+        
+        /* Empty state */
+        .no-results {
+            grid-column: 1 / -1;
+            text-align: center;
+            padding: 4rem;
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 1.2rem;
+        }
+        
+        /* Responsive design */
+        @media (max-width: 1024px) {
+            .logo-grid {
+                grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+                padding: 1.5rem;
+            }
+            
+            .header-with-search {
+                flex-direction: column;
+                gap: 1rem;
+                align-items: flex-start;
+            }
+            
+            .search-box {
+                width: 100%;
+                max-width: 400px;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .logo-grid {
+                grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+                padding: 1rem;
+            }
+            
+            .filter-container {
+                padding: 1rem 1rem 0;
+            }
+            
+            .slideshow-container {
+                height: 300px;
+            }
+            
+            .modal-content {
+                padding: 1.5rem;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .logo-grid {
+                grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            }
+            
+            .filter-btn {
+                padding: 0.5rem 1rem;
+                font-size: 0.8rem;
+            }
+            
+            .slideshow-container {
+                height: 250px;
+            }
+        }
+        
+        /* Focus states for accessibility */
+        button:focus, .logo-box:focus {
+            outline: 2px solid var(--primary-color);
+            outline-offset: 2px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Minimalist Navigation -->
+    <nav class="minimal-nav fixed top-0 w-full z-50">
+        <div class="container mx-auto px-6 py-4">
+            <div class="flex justify-between items-center">
+                <a href="index.html" class="text-xl font-light">Jok Production</a>
+                <div class="flex items-center gap-6">
+                    <a href="index.html" class="text-gray-400 hover:text-white transition-colors">Portfolio</a>
+                    <a href="resources.html" class="text-gray-400 hover:text-white transition-colors">Resources</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="pt-20">
+        <!-- Header with Search -->
+        <div class="header-with-search">
+            <header class="flex-1">
+                <h1 class="text-4xl md:text-5xl font-light mb-4">Logo Gallery</h1>
+                <p class="text-gray-400 max-w-2xl">
+                    A curated collection of premium brand identities. Each logo tells a unique story of innovation and design excellence.
+                </p>
+            </header>
+            
+            <!-- Search -->
+            <div class="search-box">
+                <i class="ph ph-magnifying-glass text-gray-400"></i>
+                <input type="text" class="search-input" placeholder="Search logos..." id="search-input">
+            </div>
+        </div>
+
+        <!-- Year Filter Controls -->
+        <div class="filter-container">
+            <button class="filter-btn active" data-filter="all">All Years</button>
+            <button class="filter-btn" data-filter="2024">2024</button>
+            <button class="filter-btn" data-filter="2023">2023</button>
+            <button class="filter-btn" data-filter="2022">2022</button>
+            <button class="filter-btn" data-filter="2021">2021</button>
+            <button class="filter-btn" data-filter="2020">2020</button>
+        </div>
+
+        <!-- Logo Grid -->
+        <div class="logo-grid" id="logo-grid">
+            <!-- Logos will be dynamically loaded here -->
+        </div>
+    </main>
+
+    <!-- Modal with Slideshow -->
+    <div class="modal-overlay" id="logo-modal">
+        <div class="modal-content">
+            <button class="close-modal" id="close-modal">
+                <i class="ph ph-x"></i>
+            </button>
+            
+            <!-- Slideshow -->
+            <div class="slideshow-container" id="slideshow-container">
+                <button class="slideshow-arrow prev" id="slide-prev">
+                    <i class="ph ph-caret-left"></i>
+                </button>
+                
+                <div class="slideshow-slides" id="slideshow-slides">
+                    <!-- Slides will be dynamically added here -->
+                </div>
+                
+                <button class="slideshow-arrow next" id="slide-next">
+                    <i class="ph ph-caret-right"></i>
+                </button>
+                
+                <div class="slideshow-nav" id="slideshow-nav">
+                    <!-- Navigation dots will be dynamically added here -->
+                </div>
+            </div>
+            
+            <!-- Project Details -->
+            <div class="project-details">
+                <h2 id="modal-title" class="text-2xl font-medium mb-2"></h2>
+                <p id="modal-description" class="text-gray-300 mb-4"></p>
+                <div class="flex justify-between items-center">
+                    <span id="modal-year" class="text-gray-400"></span>
+                    <span id="modal-industry" class="px-3 py-1 bg-gray-800 text-gray-300 rounded-full text-sm"></span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Generate 50 logo items with years from 2020-2024
+        const generateLogoData = () => {
+            const industries = ['tech', 'fashion', 'food', 'auto', 'entertainment', 'sports', 'health', 'finance'];
+            const years = ['2020', '2021', '2022', '2023', '2024'];
+            const adjectives = ['Innovative', 'Creative', 'Dynamic', 'Modern', 'Elegant', 'Bold', 'Minimal', 'Premium'];
+            const nouns = ['Solutions', 'Designs', 'Concepts', 'Studio', 'Works', 'Brands', 'Ventures', 'Group'];
+            
+            const logoData = [];
+            
+            for (let i = 1; i <= 50; i++) {
+                const adjective = adjectives[Math.floor(Math.random() * adjectives.length)];
+                const noun = nouns[Math.floor(Math.random() * nouns.length)];
+                const industry = industries[Math.floor(Math.random() * industries.length)];
+                const year = years[Math.floor(Math.random() * years.length)];
+                
+                // Generate multiple images for each project (for slideshow)
+                const imageCount = 3;
+                const projectImages = [];
+                
+                for (let j = 1; j <= imageCount; j++) {
+                    // Using placeholder images with different colors for variety
+                    const color = ['3B82F6', '10B981', 'EF4444', 'F59E0B', '8B5CF6', 'EC4899'][Math.floor(Math.random() * 6)];
+                    projectImages.push(`https://via.placeholder.com/600x400/${color}/FFFFFF?text=${adjective}+${noun}+${j}`);
+                }
+                
+                logoData.push({
+                    id: i,
+                    name: `${adjective} ${noun}`,
+                    image: projectImages[0], // First image as thumbnail
+                    projectImages: projectImages, // All images for slideshow
+                    industry: industry,
+                    description: `A ${industry} company specializing in cutting-edge solutions. This project was completed with attention to detail and a focus on user experience.`,
+                    year: year
+                });
+            }
+            
+            // Sort by year (most recent first)
+            return logoData.sort((a, b) => b.year - a.year);
+        };
+
+        const logoData = generateLogoData();
+
+        // Initialize the application
+        document.addEventListener('DOMContentLoaded', function() {
+            // Load logos
+            renderLogos(logoData);
+            
+            // Set up event listeners
+            setupEventListeners();
+            
+            // Initialize animations
+            initAnimations();
+        });
+
+        // Render logos to the grid
+        function renderLogos(logos) {
+            const grid = document.getElementById('logo-grid');
+            grid.innerHTML = '';
+            
+            if (logos.length === 0) {
+                grid.innerHTML = `
+                    <div class="no-results">
+                        <i class="ph ph-magnifying-glass text-4xl mb-4 opacity-50"></i>
+                        <p>No logos found matching your criteria</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            logos.forEach(logo => {
+                const logoBox = document.createElement('div');
+                logoBox.className = 'logo-box';
+                logoBox.setAttribute('data-industry', logo.industry);
+                logoBox.setAttribute('data-year', logo.year);
+                logoBox.setAttribute('data-name', logo.name.toLowerCase());
+                logoBox.tabIndex = 0; // Make focusable for accessibility
+                
+                logoBox.innerHTML = `
+                    <img src="${logo.image}" alt="${logo.name} Logo" class="logo-img">
+                    <div class="logo-info">
+                        <h3 class="font-bold text-lg">${logo.name}</h3>
+                        <p class="text-sm text-gray-300">${logo.year} • ${logo.industry.charAt(0).toUpperCase() + logo.industry.slice(1)}</p>
+                    </div>
+                `;
+                
+                // Add click event to open modal
+                logoBox.addEventListener('click', () => openModal(logo));
+                logoBox.addEventListener('keypress', (e) => {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                        openModal(logo);
+                    }
+                });
+                
+                grid.appendChild(logoBox);
+            });
+            
+            // Animate logo boxes
+            animateLogoBoxes();
+        }
+
+        // Animate logo boxes on load
+        function animateLogoBoxes() {
+            gsap.utils.toArray('.logo-box').forEach((box, i) => {
+                gsap.from(box, {
+                    duration: 0.8,
+                    y: 100,
+                    opacity: 0,
+                    rotationY: -15,
+                    delay: i * 0.03,
+                    ease: 'power3.out'
+                });
+            });
+        }
+
+        // Set up event listeners
+        function setupEventListeners() {
+            // Filter buttons
+            document.querySelectorAll('.filter-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    // Update active button
+                    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+                    this.classList.add('active');
+                    
+                    // Filter logos
+                    const filter = this.getAttribute('data-filter');
+                    filterLogos(filter);
+                });
+            });
+            
+            // Search functionality
+            document.getElementById('search-input').addEventListener('input', function(e) {
+                const searchTerm = e.target.value.toLowerCase();
+                filterLogosBySearch(searchTerm);
+            });
+            
+            // Modal close button
+            document.getElementById('close-modal').addEventListener('click', closeModal);
+            
+            // Close modal when clicking outside
+            document.getElementById('logo-modal').addEventListener('click', function(e) {
+                if (e.target === this) closeModal();
+            });
+            
+            // Keyboard events
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape') closeModal();
+            });
+        }
+
+        // Initialize animations
+        function initAnimations() {
+            // Header animation
+            gsap.from('header h1', {
+                duration: 0.8,
+                y: 30,
+                opacity: 0,
+                ease: 'power2.out'
+            });
+            
+            gsap.from('header p', {
+                duration: 0.8,
+                y: 30,
+                opacity: 0,
+                delay: 0.2,
+                ease: 'power2.out'
+            });
+        }
+
+        // Filter logos by year
+        function filterLogos(yearFilter) {
+            const filteredLogos = yearFilter === 'all' 
+                ? logoData 
+                : logoData.filter(logo => logo.year === yearFilter);
+            
+            renderLogos(filteredLogos);
+        }
+
+        // Filter logos by search term
+        function filterLogosBySearch(term) {
+            const filteredLogos = term === '' 
+                ? logoData 
+                : logoData.filter(logo => 
+                    logo.name.toLowerCase().includes(term) || 
+                    logo.description.toLowerCase().includes(term) ||
+                    logo.industry.toLowerCase().includes(term)
+                );
+            
+            renderLogos(filteredLogos);
+        }
+
+        // Slideshow functionality
+        let currentSlide = 0;
+        let slideshowImages = [];
+
+        function initSlideshow(images) {
+            slideshowImages = images;
+            currentSlide = 0;
+            
+            const slidesContainer = document.getElementById('slideshow-slides');
+            const navContainer = document.getElementById('slideshow-nav');
+            
+            // Clear previous slides
+            slidesContainer.innerHTML = '';
+            navContainer.innerHTML = '';
+            
+            // Create slides
+            images.forEach((image, index) => {
+                const slide = document.createElement('div');
+                slide.className = `slideshow-slide ${index === 0 ? 'active' : ''}`;
+                slide.innerHTML = `<img src="${image}" class="slideshow-image" alt="Project image ${index + 1}">`;
+                slidesContainer.appendChild(slide);
+                
+                // Create navigation dots
+                const dot = document.createElement('div');
+                dot.className = `slideshow-dot ${index === 0 ? 'active' : ''}`;
+                dot.addEventListener('click', () => goToSlide(index));
+                navContainer.appendChild(dot);
+            });
+            
+            // Set up arrow event listeners
+            document.getElementById('slide-prev').addEventListener('click', prevSlide);
+            document.getElementById('slide-next').addEventListener('click', nextSlide);
+        }
+
+        function goToSlide(index) {
+            // Update slides
+            document.querySelectorAll('.slideshow-slide').forEach((slide, i) => {
+                slide.classList.toggle('active', i === index);
+            });
+            
+            // Update dots
+            document.querySelectorAll('.slideshow-dot').forEach((dot, i) => {
+                dot.classList.toggle('active', i === index);
+            });
+            
+            currentSlide = index;
+        }
+
+        function nextSlide() {
+            const nextIndex = (currentSlide + 1) % slideshowImages.length;
+            goToSlide(nextIndex);
+        }
+
+        function prevSlide() {
+            const prevIndex = (currentSlide - 1 + slideshowImages.length) % slideshowImages.length;
+            goToSlide(prevIndex);
+        }
+
+        // Open modal with logo details and slideshow
+        function openModal(logo) {
+            const modal = document.getElementById('logo-modal');
+            const modalTitle = document.getElementById('modal-title');
+            const modalDescription = document.getElementById('modal-description');
+            const modalIndustry = document.getElementById('modal-industry');
+            const modalYear = document.getElementById('modal-year');
+            
+            // Set modal content
+            modalTitle.textContent = logo.name;
+            modalDescription.textContent = logo.description;
+            modalIndustry.textContent = logo.industry.charAt(0).toUpperCase() + logo.industry.slice(1);
+            modalYear.textContent = `Created in ${logo.year}`;
+            
+            // Initialize slideshow with project images
+            initSlideshow(logo.projectImages);
+            
+            // Show modal with animation
+            modal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        // Close modal
+        function closeModal() {
+            const modal = document.getElementById('logo-modal');
+            modal.classList.remove('active');
+            document.body.style.overflow = 'auto';
+        }
+    </script>
+</body>
+</html>
