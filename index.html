@@ -61,10 +61,11 @@
             transform: translateY(30px);
         }
         
-        /* Mobile menu styles */
+        /* Mobile menu styles - FIXED */
         .mobile-menu {
             transform: translateY(-100%);
             transition: transform 0.5s cubic-bezier(0.77, 0, 0.175, 1);
+            z-index: 40;
         }
         
         .mobile-menu.active {
@@ -73,15 +74,16 @@
         
         .menu-btn {
             width: 30px;
-            height: 30px;
+            height: 24px;
             position: relative;
             cursor: pointer;
+            z-index: 50;
         }
         
         .menu-btn span {
             display: block;
             position: absolute;
-            height: 2px;
+            height: 3px;
             width: 100%;
             background: white;
             border-radius: 2px;
@@ -92,11 +94,11 @@
         }
         
         .menu-btn span:nth-child(1) {
-            top: 8px;
+            top: 0px;
         }
         
         .menu-btn span:nth-child(2) {
-            top: 14px;
+            top: 10px;
         }
         
         .menu-btn span:nth-child(3) {
@@ -104,7 +106,7 @@
         }
         
         .menu-btn.active span:nth-child(1) {
-            top: 14px;
+            top: 10px;
             transform: rotate(135deg);
         }
         
@@ -114,7 +116,7 @@
         }
         
         .menu-btn.active span:nth-child(3) {
-            top: 14px;
+            top: 10px;
             transform: rotate(-135deg);
         }
     </style>
@@ -133,11 +135,11 @@
                 <button class="nav-link text-white/70 hover:text-white transition-all duration-300" data-page="contact">CONTACT</button>
             </div>
             
-            <!-- Mobile Menu Button -->
-            <div class="md:hidden menu-btn">
-                <span></span>
-                <span></span>
-                <span></span>
+            <!-- Mobile Menu Button - FIXED -->
+            <div class="md:hidden menu-btn z-50">
+                <span class="bg-white"></span>
+                <span class="bg-white"></span>
+                <span class="bg-white"></span>
             </div>
         </div>
         
@@ -152,6 +154,7 @@
         </div>
     </nav>
 
+    <!-- Rest of your code remains exactly the same -->
     <!-- Pages Container -->
     <div class="relative min-h-screen pt-16">
         <!-- Home Page -->
@@ -576,22 +579,25 @@
         // Initialize Lucide icons
         lucide.createIcons();
         
-        // Mobile menu functionality
+        // Mobile menu functionality - FIXED
         const menuBtn = document.querySelector('.menu-btn');
         const mobileMenu = document.querySelector('.mobile-menu');
         
-        menuBtn.addEventListener('click', () => {
-            menuBtn.classList.toggle('active');
-            mobileMenu.classList.toggle('active');
-        });
-        
-        // Close mobile menu when clicking a link
-        document.querySelectorAll('.mobile-menu .nav-link').forEach(link => {
-            link.addEventListener('click', () => {
-                menuBtn.classList.remove('active');
-                mobileMenu.classList.remove('active');
+        if (menuBtn && mobileMenu) {
+            menuBtn.addEventListener('click', () => {
+                console.log('Hamburger clicked');
+                menuBtn.classList.toggle('active');
+                mobileMenu.classList.toggle('active');
             });
-        });
+            
+            // Close mobile menu when clicking a link
+            document.querySelectorAll('.mobile-menu .nav-link').forEach(link => {
+                link.addEventListener('click', () => {
+                    menuBtn.classList.remove('active');
+                    mobileMenu.classList.remove('active');
+                });
+            });
+        }
         
         // Page transition manager
         class PageManager {
