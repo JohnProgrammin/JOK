@@ -3,7 +3,54 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Portfolio Gallery</title>
+    
+    <!-- SEO Meta Tags -->
+    <title>John Okafo - Creative Developer Portfolio</title>
+    <meta name="description" content="John Okafo - Creative developer specializing in JavaScript, GSAP animations, and modern web development. Building immersive digital experiences with clean code.">
+    <meta name="keywords" content="web developer, javascript developer, portfolio, gsap animations, frontend developer, Nigeria developer">
+    <meta name="author" content="John Okafo">
+    
+    <!-- Open Graph Meta Tags (for social media) -->
+    <meta property="og:title" content="John Okafo - Creative Developer Portfolio">
+    <meta property="og:description" content="Creative developer specializing in JavaScript, GSAP animations, and modern web development.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://jok.vercel.app">
+    <meta property="og:image" content="https://jok.vercel.app/og-image.jpg">
+    
+    <!-- Twitter Card Meta Tags -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="John Okafo - Creative Developer Portfolio">
+    <meta name="twitter:description" content="Creative developer specializing in JavaScript, GSAP animations, and modern web development.">
+    <meta name="twitter:image" content="https://jok.vercel.app/og-image.jpg">
+    
+    <!-- Canonical URL -->
+    <link rel="canonical" href="https://jok.vercel.app">
+    
+    <!-- Structured Data (JSON-LD) -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Person",
+      "name": "John Okafo",
+      "url": "https://jok.vercel.app",
+      "image": "https://jok.vercel.app/profile.jpg",
+      "sameAs": [
+        "https://github.com/yourusername",
+        "https://linkedin.com/in/yourusername"
+      ],
+      "jobTitle": "Creative Developer",
+      "worksFor": {
+        "@type": "Organization",
+        "name": "Freelance"
+      },
+      "contactPoint": {
+        "@type": "ContactPoint",
+        "email": "jokafor809@gmail.com",
+        "telephone": "+234-815-598-5292",
+        "contactType": "Personal"
+      }
+    }
+    </script>
     
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -125,7 +172,7 @@
     <!-- Navigation -->
     <nav class="fixed top-0 left-0 right-0 z-50 p-6 bg-black/80 backdrop-blur-md">
         <div class="max-w-7xl mx-auto flex justify-between items-center">
-            <div class="text-2xl font-light tracking-widest">PORTFOLIO</div>
+            <div class="text-2xl font-light tracking-widest">JOHN OKAFO</div>
             
             <!-- Desktop Navigation -->
             <div class="hidden md:flex space-x-8">
@@ -154,7 +201,6 @@
         </div>
     </nav>
 
-    <!-- Rest of your code remains exactly the same -->
     <!-- Pages Container -->
     <div class="relative min-h-screen pt-16">
         <!-- Home Page -->
@@ -555,7 +601,7 @@
                             </div>
                         </div>
                         
-                        <form class="space-y-6">
+                        <!-- <form class="space-y-6">
                             <div>
                                 <input type="text" placeholder="Your Name" class="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 focus:outline-none focus:border-white/30 transition-all">
                             </div>
@@ -568,7 +614,7 @@
                             <button type="submit" class="border border-white/30 hover:border-white px-8 py-3 rounded-full transition-all duration-300 hover:scale-105">
                                 SEND MESSAGE
                             </button>
-                        </form>
+                        </form> -->
                     </div>
                 </div>
             </div>
@@ -599,7 +645,7 @@
             });
         }
         
-        // Page transition manager
+        // Page transition manager with SEO-friendly URLs
         class PageManager {
             constructor() {
                 this.currentPage = 'home';
@@ -633,13 +679,30 @@
                         this.navigateTo(targetPage);
                     });
                 });
+                
+                // Handle browser back/forward buttons
+                window.addEventListener('popstate', (event) => {
+                    if (event.state && event.state.page) {
+                        this.navigateTo(event.state.page, false);
+                    }
+                });
+                
+                // Initialize from URL hash on load
+                const hash = window.location.hash.substring(1);
+                const initialPage = hash || 'home';
+                this.navigateTo(initialPage, false);
             }
             
-            navigateTo(pageId) {
+            navigateTo(pageId, updateHistory = true) {
                 if (pageId === this.currentPage) return;
                 
                 this.previousPage = this.currentPage;
                 this.currentPage = pageId;
+                
+                // Update browser history for SEO (only if user initiated navigation)
+                if (updateHistory) {
+                    window.history.pushState({page: pageId}, '', `#${pageId}`);
+                }
                 
                 this.animateTransition();
             }
@@ -647,6 +710,8 @@
             animateTransition() {
                 const currentPageEl = document.getElementById(`${this.previousPage}-page`);
                 const nextPageEl = document.getElementById(`${this.currentPage}-page`);
+                
+                if (!currentPageEl || !nextPageEl) return;
                 
                 // Create GSAP timeline for smooth transition
                 const tl = gsap.timeline();
@@ -670,7 +735,7 @@
                             nextPageEl.classList.add('active');
                         }
                     },
-                "-=0.3" // Overlap the animations slightly
+                "-=0.3"
                 );
                 
                 // Animate in content sections with stagger
